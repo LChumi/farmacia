@@ -1,4 +1,179 @@
-<h1 class="text-3xl font-bold underline">
-  Hello world!
-</h1>
-<router-outlet/>
+<div class="flex w-screen h-screen justify-center items-center">
+  <div class="h-min w-1/4 p-6 bg-slate-300 rounded-lg shadow-md">
+    <form #orderForm="ngForm" (ngSubmit)="submitOrder(orderForm)" novalidate>
+      <h2 class="text-2xl font-bold mb-4">Pedido a la Farmacia</h2>
+
+      <div class="mb-4">
+        <label for="medicamento" class="block text-gray-700 font-semibold mb-2"
+          >Nombre del Medicamento:</label
+        >
+        <input
+          type="text"
+          id="medicamento"
+          name="medicamento"
+          [(ngModel)]="order.medicamento"
+          required
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="mb-4">
+        <label for="tipo" class="block text-gray-700 font-semibold mb-2"
+          >Tipo del Medicamento:</label
+        >
+        <select
+          id="tipo"
+          name="tipo"
+          [(ngModel)]="order.tipo"
+          required
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        >
+          <option value="" disabled selected>Seleccione el tipo</option>
+          <option value="analgesico">Analgésico</option>
+          <option value="analeptico">Analéptico</option>
+          <option value="anestesico">Anestésico</option>
+          <option value="antiacido">Antiácido</option>
+          <option value="antidepresivo">Antidepresivo</option>
+          <option value="antibiotico">Antibiótico</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label for="cantidad" class="block text-gray-700 font-semibold mb-2"
+          >Cantidad:</label
+        >
+        <input
+          type="number"
+          id="cantidad"
+          name="cantidad"
+          [(ngModel)]="order.cantidad"
+          required
+          min="1"
+          class="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2"
+          >Distribuidor:</label
+        >
+        <div class="flex flex-col">
+          <div class="flex items-center mb-2">
+            <input
+              type="radio"
+              id="cofarma"
+              name="distribuidor"
+              value="COFARMA"
+              [(ngModel)]="order.distribuidor"
+              required
+              class="mr-2"
+            />
+            <label for="cofarma" class="text-gray-700">COFARMA</label>
+          </div>
+          <div class="flex items-center mb-2">
+            <input
+              type="radio"
+              id="empsephar"
+              name="distribuidor"
+              value="EMPSEPHAR"
+              [(ngModel)]="order.distribuidor"
+              required
+              class="mr-2"
+            />
+            <label for="empsephar" class="text-gray-700">EMPSEPHAR</label>
+          </div>
+          <div class="flex items-center">
+            <input
+              type="radio"
+              id="cemefar"
+              name="distribuidor"
+              value="CEMEFAR"
+              [(ngModel)]="order.distribuidor"
+              required
+              class="mr-2"
+            />
+            <label for="cemefar" class="text-gray-700">CEMEFAR</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-gray-700 font-semibold mb-2">Sucursal:</label>
+        <div class="flex flex-col">
+          <div class="flex items-center mb-2">
+            <input
+              type="checkbox"
+              id="principal"
+              name="sucursal"
+              value="PRINCIPAL"
+              [(ngModel)]="order.sucursal.principal"
+              class="mr-2"
+            />
+            <label for="principal" class="text-gray-700">PRINCIPAL</label>
+          </div>
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              id="secundaria"
+              name="sucursal"
+              value="SECUNDARIA"
+              [(ngModel)]="order.sucursal.secundaria"
+              class="mr-2"
+            />
+            <label for="secundaria" class="text-gray-700">SECUNDARIA</label>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex space-x-4">
+        <button
+          type="submit"
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          [disabled]="orderForm.invalid"
+        >
+          OK
+        </button>
+        <button
+          type="button"
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          (click)="resetForm(orderForm)"
+        >
+          Borrar
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal para resumen del pedido -->
+  <div
+    *ngIf="showSummary"
+    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+  >
+    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+      <h3 class="text-xl font-bold mb-4">
+        Pedido al Distribuidor {{ order.distribuidor }}
+      </h3>
+      <p class="mb-4">
+        {{ order.cantidad }} unidades del {{ order.tipo }}
+        {{ order.medicamento }}
+      </p>
+      <p class="mb-4">
+        Para la farmacia situada en {{ order.sucursalAddress }}
+      </p>
+      <div class="flex space-x-4">
+        <button
+          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+          (click)="sendOrder()"
+        >
+          Enviar Pedido
+        </button>
+        <button
+          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+          (click)="closeSummary()"
+        >
+          Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
