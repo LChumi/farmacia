@@ -145,35 +145,36 @@
   </div>
 
   <!-- Modal para resumen del pedido -->
-  <div
-    *ngIf="showSummary"
-    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
-  >
-    <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-      <h3 class="text-xl font-bold mb-4">
-        Pedido al Distribuidor {{ order.distribuidor }}
-      </h3>
-      <p class="mb-4">
-        {{ order.cantidad }} unidades del {{ order.tipo }}
-        {{ order.medicamento }}
-      </p>
-      <p class="mb-4">
-        Para la farmacia situada en {{ order.sucursalAddress }}
-      </p>
-      <div class="flex space-x-4">
-        <button
-          class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
-          (click)="sendOrder()"
-        >
-          Enviar Pedido
-        </button>
-        <button
-          class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
-          (click)="closeSummary()"
-        >
-          Cancelar
-        </button>
+  @if (showSummary){
+    <div
+      class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50"
+    >
+      <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+        <h3 class="text-xl font-bold mb-4">
+          Pedido al Distribuidor {{ order.distribuidor }}
+        </h3>
+        <p class="mb-4">
+          {{ order.cantidad }} unidades del {{ order.tipo }}
+          {{ order.medicamento }}
+        </p>
+        <p class="mb-4">
+          Para la farmacia situada en {{ order.sucursalAddress }}
+        </p>
+        <div class="flex space-x-4">
+          <button
+            class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+            (click)="sendOrder()"
+          >
+            Enviar Pedido
+          </button>
+          <button
+            class="px-4 py-2 bg-gray-500 text-white rounded-lg hover:bg-gray-600 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2"
+            (click)="closeSummary()"
+          >
+            Cancelar
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  }
 </div>
