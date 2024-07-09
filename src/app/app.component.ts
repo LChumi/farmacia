@@ -84,6 +84,9 @@ export class AppComponent {
     this.mostrarModal = false;
     console.log(this.resumenPedido);
     this.mostrarAlerta('Pedido Enviado', 'border-green-500 text-green-500');
+    setTimeout(() => {
+      this.borrarDatos()      
+    }, 1000);
   }
 
   cancelarPedido() {
